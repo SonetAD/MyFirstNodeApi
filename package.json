@@ -1,0 +1,13 @@
+{
+  "devDependencies": {
+    "eslint": "^7.32.0 || ^8.2.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.25.2"
+  },
+  "scripts": {
+    "start": "NODE_ENV=stage nodemon index.js",
+    "prod": "NODE_ENV=prod nodemon index",
+    "lint": "eslint ./*.js",
+    "fix": "eslint ./*.js --fix"
+  }
+}
