@@ -10,11 +10,13 @@ const env = {};
 env.prod = {
   port: 5000,
   name: 'Production',
+  passKey: 'prodKey',
 };
 
 env.stage = {
   port: 3000,
   name: 'Staging',
+  passKey: 'stageKey',
 };
 
 // Determined which environment has passed

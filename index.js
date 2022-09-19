@@ -7,6 +7,6 @@ Date: 5 sep,2020 */
 const { createServer } = require('./Helpers/http');
 
 // Module scaffolding
-const app = {};
+// const app = {};
 
 createServer();

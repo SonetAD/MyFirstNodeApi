@@ -6,7 +6,7 @@ Date: 8 Sep,2022 */
 // Module scaffolding
 const app = {};
 
-app.sample = (hhhhhhhhhhhhhhhhhhhreqData, callBack) => {
+app.sampleHandler = (reqData, callBack) => {
   callBack(200, { message: 'You are visiting sample page' });
   console.log('reqData');
 };

@@ -7,10 +7,12 @@ Date:6 sep,2020 */
 const http = require('http');
 const url = require('url');
 const { StringDecoder } = require('string_decoder');
-const routes = require('../Handlers/Routehandlers/sampleHandler');
+const utils = require('./util');
+const routes = require('./routes');
 const { notFound } = require('../Handlers/Routehandlers/notfoundRoute');
 const env = require('./env');
 const crud = require('../lib/data');
+const { readData } = require('../lib/data');
 
 // Module scaffold object
 const app = {};
@@ -35,21 +37,29 @@ function onConnection(req, res) {
   const method = req.method.toLowerCase();
   const { headers } = req;
   const decoder = new StringDecoder('utf-8');
+  let realData = '';
   const reqObj = {
     urlParse,
     method,
     headers,
-    decoder,
   };
   const choosenHandler = routes[pathName] ? routes[pathName] : notFound;
+  res.setHeader('Content-Type', 'application/json');
 
   req.on('data', (chunck) => {
-    console.log(chunck);
+    realData += decoder.write(chunck);
+  });
+
+  req.on('end', () => {
+    realData += decoder.end();
+    console.log(realData);
+    reqObj.body = utils.jsonParser(realData);
     choosenHandler(reqObj, (status, payLoad) => {
       const statusCode = typeof status === 'number' ? status : 500;
       const payLoadData = typeof payLoad === 'object' ? payLoad : {};
       const payLoadString = JSON.stringify(payLoadData);
       res.writeHead(statusCode);
+
       res.end(payLoadString);
     });
   });
