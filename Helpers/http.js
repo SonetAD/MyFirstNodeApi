@@ -31,6 +31,7 @@ app.createServer = () => {
 
 function onConnection(req, res) {
   const urlParse = url.parse(req.url, true);
+  const { query } = urlParse;
   const { pathname } = urlParse;
   const regex = /^\/+|\/+$/g;
   const pathName = pathname.replace(regex, '');
@@ -42,6 +43,7 @@ function onConnection(req, res) {
     urlParse,
     method,
     headers,
+    query,
   };
   const choosenHandler = routes[pathName] ? routes[pathName] : notFound;
   res.setHeader('Content-Type', 'application/json');
@@ -52,7 +54,6 @@ function onConnection(req, res) {
 
   req.on('end', () => {
     realData += decoder.end();
-    console.log(realData);
     reqObj.body = utils.jsonParser(realData);
     choosenHandler(reqObj, (status, payLoad) => {
       const statusCode = typeof status === 'number' ? status : 500;

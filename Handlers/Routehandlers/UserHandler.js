@@ -23,11 +23,26 @@ app.userHandler = (reqData, callBack) => {
 };
 
 handlers.get = (reqData, callBack) => {
-  callBack(200, { message: 'Done' });
+  // Check the phone number is vallied
+  const phoneNumber = typeof (reqData.query.phonenumber) === 'string' && reqData.query.phonenumber.trim().length === 11 ? reqData.query.phonenumber : null;
+
+  if (phoneNumber) {
+    // Look up the user
+    crud.readData('users', phoneNumber, (err, user) => {
+      if (!err) {
+        const userObj = util.jsonParser(user);
+        delete userObj.password;
+        callBack(200, userObj);
+      } else {
+        callBack(404, { error: 'Requested user was not found' });
+      }
+    });
+  } else {
+    callBack(404, { error: 'Requested user was not found' });
+  }
 };
 
 handlers.post = (reqData, callBack) => {
-  console.log('I am post');
   const firstName = typeof (reqData.body.firstname) === 'string' && reqData.body.firstname.trim().length > 0 ? reqData.body.firstname : null;
 
   const lastName = typeof (reqData.body.lastname) === 'string' && reqData.body.lastname.trim().length > 0 ? reqData.body.lastname : null;
